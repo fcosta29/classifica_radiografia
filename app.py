@@ -12,7 +12,7 @@ from PIL import Image
 
 def carrega_modelo():
 
-    url = 'https://drive.google.com/file/d/1VHnVoB7DFqdNHrsSN0qj99usCKUx38P9'
+    url = 'https://drive.google.com/uc?id=1VHnVoB7DFqdNHrsSN0qj99usCKUx38P9'
     output = 'modelo_panoramica_v1.tflite'
     gdown.download(url, output)
 
