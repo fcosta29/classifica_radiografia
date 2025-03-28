@@ -5,4 +5,4 @@ pillow
 gdown
 plotly
 tensorflow
-cv2
+opencv-python
