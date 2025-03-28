@@ -33,7 +33,7 @@ def carrega_imagem():
         st.success('Imagem foi carregada com sucesso')
 
         # Redimensiona a imagem para 220x200 (necessário para o modelo)
-        image = image.resize((220, 200))
+        image = image.resize((200, 200))
 
         # Converte a imagem para RGBA (adiciona o canal alfa, se necessário)
         image = image.convert("RGBA")
