@@ -65,7 +65,22 @@ def previsao(interpreter, image):
     
     st.plotly_chart(fig)
 
-
+def preprocess_image(image):
+    # Redimensiona a imagem para 200x220 pixels
+    image = cv2.resize(image, (220, 200))
+    
+    # Se a imagem for RGB, converta para o formato esperado (por exemplo, BGRA ou RGBA)
+    # Certifique-se de que tem 4 canais de cor, se necessário.
+    if image.shape[-1] != 4:
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGRA)  # Alterar conforme necessário
+    
+    # Normaliza a imagem, caso necessário (por exemplo, de 0-255 para 0-1)
+    image = image.astype(np.float32)  # Converte para float32
+    
+    # Expande a dimensão para (1, 200, 220, 4)
+    image = np.expand_dims(image, axis=0)
+    
+    return image
 
 def main():
     
@@ -82,9 +97,9 @@ def main():
     #classifica
     if image is not None:
 
-        previsao(interpreter,image)
-
-
+        #converter a imagem para o formato necessário
+        imagem_formatada = preprocess_image(image)
+        previsao(interpreter,imagem_formatada)
 
 if __name__ == "__main__":
     main()
