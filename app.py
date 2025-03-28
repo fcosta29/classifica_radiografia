@@ -1,5 +1,4 @@
 import streamlit as st
-import cv2
 import gdown
 import tensorflow as tf
 import io
@@ -66,6 +65,25 @@ def previsao(interpreter, image):
     
     st.plotly_chart(fig)
 
+def preprocess_image(image):
+    # Abre a imagem com PIL
+    pil_image = Image.open(image)
+    
+    # Redimensiona a imagem para 200x220
+    pil_image = pil_image.resize((220, 200))
+    
+    # Converte a imagem para RGBA (se for RGB, adiciona um canal alfa)
+    pil_image = pil_image.convert("RGBA")
+    
+    # Converte a imagem para um numpy array e normaliza os valores
+    image_array = np.array(pil_image, dtype=np.float32)
+    image_array /= 255.0  # Normaliza os valores para o intervalo [0, 1]
+    
+    # Adiciona a dimensão do batch (1, 200, 220, 4)
+    image_array = np.expand_dims(image_array, axis=0)
+    
+    return image_array    
+
 def main():
     
     st.set_page_config(
@@ -80,8 +98,8 @@ def main():
     image = carrega_imagem()
     #classifica
     if image is not None:
-        
-        previsao(interpreter,image)
+        image_reprocessada = preprocess_image(image)
+        previsao(interpreter,image_reprocessada)
 
 if __name__ == "__main__":
     main()
