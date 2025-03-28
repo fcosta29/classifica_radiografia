@@ -67,7 +67,7 @@ def previsao(interpreter, image):
 
 def preprocess_image(image):
     # Abre a imagem com PIL
-    pil_image = Image.open(image)
+    pil_image = Image.open(io.BytesIO(image.read()))
     
     # Redimensiona a imagem para 200x220
     pil_image = pil_image.resize((220, 200))
