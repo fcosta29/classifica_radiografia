@@ -66,7 +66,7 @@ def previsao(interpreter, image):
     
     st.plotly_chart(fig)
 
-def preprocess_image(image):
+'''def preprocess_image(image):
     # Redimensiona a imagem para 200x220 pixels
     image = cv2.resize(image, (220, 200))
     
@@ -81,7 +81,7 @@ def preprocess_image(image):
     # Expande a dimensão para (1, 200, 220, 4)
     image = np.expand_dims(image, axis=0)
     
-    return image
+    return image'''
 
 def main():
     
@@ -99,8 +99,8 @@ def main():
     if image is not None:
 
         #converter a imagem para o formato necessário
-        imagem_formatada = preprocess_image(image)
-        previsao(interpreter,imagem_formatada)
+        #imagem_formatada = preprocess_image(image)
+        previsao(interpreter,image)
 
 if __name__ == "__main__":
     main()
