@@ -65,19 +65,18 @@ def main():
     
     st.set_page_config(
     page_title="Classifica radiologia",
-    page_icon="��",
     )
 
-    st.write("# Classifica radiologia! ��")
+    st.write("# Classifica radiologia!")
 
     #carrega modelo
-    interpreter = carrega_modelo()
+    #interpreter = carrega_modelo()
     #carrega imagem
     image = carrega_imagem()
     #classifica
-    if image is not None:
+    #if image is not None:
 
-        previsao(interpreter,image)
+        #previsao(interpreter,image)
 
 
 
