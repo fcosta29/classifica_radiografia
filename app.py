@@ -5,7 +5,6 @@ import io
 import pandas as pd
 import numpy as np
 import plotly.express as px
-#import cv2
 from PIL import Image
 
 
@@ -66,23 +65,6 @@ def previsao(interpreter, image):
     
     st.plotly_chart(fig)
 
-'''def preprocess_image(image):
-    # Redimensiona a imagem para 200x220 pixels
-    image = cv2.resize(image, (220, 200))
-    
-    # Se a imagem for RGB, converta para o formato esperado (por exemplo, BGRA ou RGBA)
-    # Certifique-se de que tem 4 canais de cor, se necessário.
-    if image.shape[-1] != 4:
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGRA)  # Alterar conforme necessário
-    
-    # Normaliza a imagem, caso necessário (por exemplo, de 0-255 para 0-1)
-    image = image.astype(np.float32)  # Converte para float32
-    
-    # Expande a dimensão para (1, 200, 220, 4)
-    image = np.expand_dims(image, axis=0)
-    
-    return image'''
-
 def main():
     
     st.set_page_config(
@@ -97,9 +79,7 @@ def main():
     image = carrega_imagem()
     #classifica
     if image is not None:
-
-        #converter a imagem para o formato necessário
-        #imagem_formatada = preprocess_image(image)
+        
         previsao(interpreter,image)
 
 if __name__ == "__main__":
