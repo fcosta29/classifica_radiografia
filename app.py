@@ -74,9 +74,9 @@ def main():
     #carrega imagem
     image = carrega_imagem()
     #classifica
-    #if image is not None:
+    if image is not None:
 
-        #previsao(interpreter,image)
+        previsao(interpreter,image)
 
 
 
