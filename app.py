@@ -42,20 +42,20 @@ def previsao(interpreter, image):
 
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
-
-    interpreter.set_tensor(input_details[0]['index'],image)
-
+    
+    interpreter.set_tensor(input_details[0]['index'],image) 
+    
     interpreter.invoke()
+    
+    output_data = interpreter.get_tensor(output_details[0]['index'])
 
-    outpu_data = interpreter.get_tensor(output_details[0]['index'])
     classes = ['Panoramicas','Periapical_radiologia']
 
     df = pd.DataFrame()
     df['classes'] = classes
-    df['probabilidades (%)'] = 100*outpu_data[0]
-
-    fig = px.bar(df, y='classes', x='probalidades (%)', orientation='h', text='probalidades (%)',
-                 title='Probalidade de classes de radiologia')
+    df['probabilidades (%)'] = 100*output_data[0]
+    
+    fig = px.bar(df,y='classes',x='probabilidades (%)',  orientation='h', text='probabilidades (%)', title='Probabilidade de Classes de Radiografia')
     
     st.plotly_chart(fig)
 
