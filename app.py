@@ -32,6 +32,12 @@ def carrega_imagem():
         st.image(image)
         st.success('Imagem foi carregada com sucesso')
 
+        # Redimensiona a imagem para 220x200 (necessário para o modelo)
+        image = image.resize((220, 200))
+
+        # Converte a imagem para RGBA (adiciona o canal alfa, se necessário)
+        image = image.convert("RGBA")
+
         image = np.array(image,dtype=np.float32)
         image = image / 255.0
         image = np.expand_dims(image, axis=0)
@@ -65,13 +71,6 @@ def previsao(interpreter, image):
     
     st.plotly_chart(fig)
 
-def preprocess_image(image):
-    image = Image.open(io.BytesIO(image.read()))  # Usando io.BytesIO para converter os bytes em um fluxo
-
-    # Redimensiona a imagem
-    image = image.resize((220, 200))  
-
-    return image
 
 def main():
     
@@ -87,8 +86,7 @@ def main():
     image = carrega_imagem()
     #classifica
     if image is not None:
-        image_reprocessada = preprocess_image(image)
-        previsao(interpreter,image_reprocessada)
+        previsao(interpreter,image)
 
 if __name__ == "__main__":
     main()
