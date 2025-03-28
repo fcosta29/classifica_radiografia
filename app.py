@@ -16,7 +16,7 @@ def carrega_modelo():
     output = 'modelo_panoramica_v1.tflite'
     gdown.download(url, output)
 
-    interpreter = tf.lite.Interpreter(model_path=output)
+    interpreter = tf.lite.Interpreter(model_path='modelo_panoramica_v1.tflite')
     interpreter.allocate_tensors()
 
     return interpreter
