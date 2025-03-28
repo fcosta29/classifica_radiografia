@@ -66,23 +66,12 @@ def previsao(interpreter, image):
     st.plotly_chart(fig)
 
 def preprocess_image(image):
-    # Abre a imagem com PIL
-    pil_image = Image.open(io.BytesIO(image.read()))
-    
-    # Redimensiona a imagem para 200x220
-    pil_image = pil_image.resize((220, 200))
-    
-    # Converte a imagem para RGBA (se for RGB, adiciona um canal alfa)
-    pil_image = pil_image.convert("RGBA")
-    
-    # Converte a imagem para um numpy array e normaliza os valores
-    image_array = np.array(pil_image, dtype=np.float32)
-    image_array /= 255.0  # Normaliza os valores para o intervalo [0, 1]
-    
-    # Adiciona a dimensão do batch (1, 200, 220, 4)
-    image_array = np.expand_dims(image_array, axis=0)
-    
-    return image_array    
+    image = Image.open(io.BytesIO(image.read()))  # Usando io.BytesIO para converter os bytes em um fluxo
+
+    # Redimensiona a imagem
+    image = image.resize((220, 200))  
+
+    return image
 
 def main():
     
