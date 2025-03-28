@@ -12,11 +12,11 @@ from PIL import Image
 
 def carrega_modelo():
 
-    url = 'https://drive.google.com/file/d/1VHnVoB7DFqdNHrsSN0qj99usCKUx38P9/view?usp=drive_link'
+    url = 'https://drive.google.com/file/d/1VHnVoB7DFqdNHrsSN0qj99usCKUx38P9'
     output = 'modelo_panoramica_v1.tflite'
     gdown.download(url, output)
 
-    interpreter = tf.lite.Interpreter(model_path='modelo_panoramica_v1.tflite')
+    interpreter = tf.lite.Interpreter(model_path=output)
     interpreter.allocate_tensors()
 
     return interpreter
