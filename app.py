@@ -80,7 +80,7 @@ def main():
     st.write("# Classifica radiologia!")
 
     #carrega modelo
-    interpreter = carrega_modelo()
+    # interpreter = carrega_modelo()
     #carrega imagem
     image = carrega_imagem()
     #classifica
