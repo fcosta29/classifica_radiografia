@@ -49,11 +49,11 @@ def previsao(interpreter, image):
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
 
-    st.write("Detalhes de Entrada (Input Details):")
-    st.json(input_details)
+    #st.write("Detalhes de Entrada (Input Details):")
+    #st.json(input_details)
 
-    st.write("Detalhes de Saída (Output Details):")
-    st.json(output_details)
+    #st.write("Detalhes de Saída (Output Details):")
+    #st.json(output_details)
     
     interpreter.set_tensor(input_details[0]['index'],image) 
     
@@ -61,7 +61,7 @@ def previsao(interpreter, image):
     
     output_data = interpreter.get_tensor(output_details[0]['index'])
 
-    classes = ['Panoramicas','Periapical_radiologia']
+    classes = ['MIE', 'MID', 'PMSE', 'MSE', 'MSD', 'PMSD', 'IS', 'PMIE', 'PMID', 'Panoramicas', 'II', 'CSD', 'CSE', 'CID', 'CIE']
 
     df = pd.DataFrame()
     df['classes'] = classes
