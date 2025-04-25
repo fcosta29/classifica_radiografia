@@ -11,9 +11,9 @@ from PIL import Image
 @st.cache_resource
 
 def carrega_modelo():
-
-    url = 'https://drive.google.com/uc?id=1VHnVoB7DFqdNHrsSN0qj99usCKUx38P9'
-    output = 'modelo_panoramica_v1.tflite'
+          #https://drive.google.com/file/d/1jxwhxLYwmuSNOCLgQ8h46MHpyDpPeQ9o/view?usp=drive_link
+    url = 'https://drive.google.com/uc?id=1jxwhxLYwmuSNOCLgQ8h46MHpyDpPeQ9o'
+    output = 'modelo_quantizado16bits.tflite'
     gdown.download(url, output)
 
     interpreter = tf.lite.Interpreter(model_path=output)
@@ -21,9 +21,8 @@ def carrega_modelo():
 
     return interpreter
 
-
 def carrega_imagem():
-    uploaded_file = st.file_uploader('Escolha uma imagem', type=['jpg','jpeg','png']) 
+    uploaded_file = st.file_uploader('Escolha uma Radiografia', type=['jpg','jpeg','png']) 
 
     if uploaded_file is not None:
         image_data = uploaded_file.read()
@@ -36,7 +35,7 @@ def carrega_imagem():
         image = image.resize((200, 200))
 
         # Converte a imagem para RGBA (adiciona o canal alfa, se necessário)
-        image = image.convert("RGBA")
+        # image = image.convert("RGBA")
 
         image = np.array(image,dtype=np.float32)
         image = image / 255.0
