@@ -64,11 +64,11 @@ def previsao(interpreter, image):
     classes = ['MIE', 'MID', 'PMSE', 'MSE', 'MSD', 'PMSD', 'IS', 'PMIE', 'PMID', 'Panoramicas', 'II', 'CSD', 'CSE', 'CID', 'CIE']
 
     df = pd.DataFrame()
-    #st.write("Probabilidades por Classe:")
-    #st.json(df.set_index('classes')['probabilidades (%)'].round(2).to_dict())
-
     df['classes'] = classes
     df['probabilidades (%)'] = 100*output_data[0]
+
+    st.write("Probabilidades por Classe:")
+    st.json(df.set_index('classes')['probabilidades (%)'].round(2).to_dict())
     
     fig = px.bar(df,y='classes',x='probabilidades (%)',  orientation='h', text='probabilidades (%)', title='Probabilidade de Classes de Radiografia')
     
