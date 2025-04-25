@@ -14,6 +14,7 @@ def carrega_modelo():
           #https://drive.google.com/file/d/1jxwhxLYwmuSNOCLgQ8h46MHpyDpPeQ9o/view?usp=drive_link
     url = 'https://drive.google.com/uc?id=1jxwhxLYwmuSNOCLgQ8h46MHpyDpPeQ9o'
     output = 'modelo_quantizado16bits.tflite'
+    
     gdown.download(url, output)
 
     interpreter = tf.lite.Interpreter(model_path=output)
