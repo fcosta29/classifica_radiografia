@@ -79,7 +79,7 @@ def valida_imagem_duplicada(image, key, access):
     bucket_name = "brzd-dev-images"
     s3 = boto3.client(
         's3',
-        aws_access_key_id= key,
+        aws_access_key_id=key,
         aws_secret_access_key=access
     )
 
