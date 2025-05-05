@@ -6,3 +6,6 @@ gdown
 plotly
 tensorflow
 boto3
+imagehash
+hashlib
+cv2

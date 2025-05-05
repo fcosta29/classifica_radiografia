@@ -2,6 +2,9 @@ import streamlit as st
 import os
 import boto3
 import gdown
+import imagehash
+import hashlib
+import cv2
 import tensorflow as tf
 import io
 import pandas as pd
@@ -11,6 +14,61 @@ from PIL import Image
 
 
 @st.cache_resource
+
+def calcular_similaridade_hash_arquivo_local(caminho):
+    imagem = Image.open(caminho)
+    return imagehash.phash(imagem)  # ou dhash, ahash
+
+def calcular_hash_arquivo_local(caminho):
+    """Calcula o hash MD5 de um arquivo local."""
+    hash_md5 = hashlib.md5()
+    with open(caminho, 'rb') as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
+
+def calcular_hash_bytes(dados_bytes):
+    """Calcula o hash MD5 de dados binários."""
+    return hashlib.md5(dados_bytes).hexdigest()
+
+def calcular_similaridade_hash_bytes(dados_bytes):
+    imagem = Image.open(io.BytesIO(dados_bytes))
+    return imagehash.phash(imagem)
+
+def comparar_imagem_caminho_com_bytes(img_path, img_bytes, tamanho=(200, 200), limite_iguais=0.95, limite_semelhantes=0.90):
+    # Lê a imagem do caminho
+    img1 = cv2.imread(img_path)
+    if img1 is None:
+        raise ValueError("Imagem do caminho não pôde ser carregada.")
+
+    # Lê a imagem a partir dos bytes
+    nparr = np.frombuffer(img_bytes, np.uint8)
+    img2 = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    if img2 is None:
+        raise ValueError("Imagem dos bytes não pôde ser decodificada.")
+
+    # Redimensiona ambas para o mesmo tamanho
+    img1 = cv2.resize(img1, tamanho)
+    img2 = cv2.resize(img2, tamanho)
+
+    # Calcula a diferença absoluta e converte para escala de cinza
+    diff = cv2.absdiff(img1, img2)
+    diff_gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
+
+    # Soma os valores das diferenças
+    score = np.sum(diff_gray)
+    max_diff = tamanho[0] * tamanho[1] * 255
+    similaridade = 1 - (score / max_diff)
+
+    # Classificação com base nos limites
+    if similaridade >= limite_iguais:
+        resultado = "iguais"
+    elif similaridade >= limite_semelhantes:
+        resultado = "semelhantes"
+    else:
+        resultado = "diferentes"
+
+    return resultado, round(similaridade, 2)
 
 def carrega_modelo():
           #https://drive.google.com/file/d/1jxwhxLYwmuSNOCLgQ8h46MHpyDpPeQ9o/view?usp=drive_link
@@ -77,7 +135,7 @@ def previsao(interpreter, image):
     
     st.plotly_chart(fig)
 
-def valida_imagem_duplicada(image):
+def valida_imagem_duplicada(image_upload):
 
     aws_key = st.secrets["AWS_KEY"]
     aws_secret = st.secrets["AWS_SECRET"]
@@ -93,6 +151,51 @@ def valida_imagem_duplicada(image):
         aws_access_key_id=aws_key,
         aws_secret_access_key=aws_secret
     )
+
+    try:
+        response = s3.list_objects_v2(Bucket=bucket_name)
+        if 'Contents' in response:
+            # Calcula hash da imagem local
+            local_hash = calcular_hash_arquivo_local(image_upload)
+            local_similaridade = calcular_similaridade_hash_arquivo_local(image_upload)
+
+            st.write("Listando arquivos no AWS:")
+
+            for obj in response['Contents']:
+                if obj['Key'].endswith('.jpg'):
+
+                    st.write(f"Nome do arquivo: {obj['Key']}")    
+                    
+                    # Baixa imagem do S3 para memória
+                    #obj_data = s3.get_object(Bucket=bucket_name, Key=obj['Key'])
+                    #s3_image_bytes = obj_data['Body'].read()
+
+                    # Calcula hash da imagem do S3
+                    #s3_hash = calcular_hash_bytes(s3_image_bytes)
+                    # Calcula similaridade da imagem do S3
+                    #s3_similaridade = calcular_similaridade_hash_bytes(s3_image_bytes)
+     
+                    # Compara
+                    #if s3_hash == local_hash:
+                        #print(f"IMAGEM IGUAL: {obj['Key']}")
+                        #break
+                    #else:                     
+                        #if local_similaridade == s3_similaridade:
+                            #print(f"IMAGEM IGUAL: {obj['Key']}")
+                        #else:
+
+                            #resultado, porcentagem = comparar_imagem_caminho_com_bytes(image_upload, s3_image_bytes) 
+
+                            #if resultado == "iguais":
+                                #print(f"IMAGEM IGUAL: {obj['Key']}, similaridade: {porcentagem}")
+                                #break
+                            #else:
+                                #print(f"IMAGEM DIFERENTE: {obj['Key']}, similaridade: {porcentagem}")
+
+        else:
+            print("Nenhuma imagem encontrada no bucket.")
+    except Exception as e:
+        print(f"Erro: {e}")
 
 def main():
 
