@@ -75,8 +75,13 @@ def previsao(interpreter, image):
     
     st.plotly_chart(fig)
 
-def valida_imagem_duplicada(image):
-    print('teste')
+def valida_imagem_duplicada(image, key, access):
+    bucket_name = "brzd-dev-images"
+    s3 = boto3.client(
+        's3',
+        aws_access_key_id= key,
+        aws_secret_access_key=access
+    )
 
 def main():
     
@@ -93,7 +98,7 @@ def main():
     #classifica
     if image is not None:
         previsao(interpreter,image)
-        valida_imagem_duplicada(image)
+        valida_imagem_duplicada(image,'st1','uye9')
 
 if __name__ == "__main__":
     main()
