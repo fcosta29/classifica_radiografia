@@ -30,6 +30,10 @@ def calcular_hash_bytes(dados_bytes):
     """Calcula o hash MD5 de dados binários."""
     return hashlib.md5(dados_bytes).hexdigest()
 
+def calcular_similaridade_hash_bytes(dados_bytes):
+    imagem = Image.open(io.BytesIO(dados_bytes))
+    return imagehash.phash(imagem)
+
 def carrega_modelo():
           #https://drive.google.com/file/d/1jxwhxLYwmuSNOCLgQ8h46MHpyDpPeQ9o/view?usp=drive_link
     url = 'https://drive.google.com/uc?id=1jxwhxLYwmuSNOCLgQ8h46MHpyDpPeQ9o'
