@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 import boto3
 import gdown
 import tensorflow as tf
@@ -75,16 +76,25 @@ def previsao(interpreter, image):
     
     st.plotly_chart(fig)
 
-def valida_imagem_duplicada(image, key, access):
+def valida_imagem_duplicada(image):
+
+    key = st.secrets["AWS_KEY"]
+    secret = st.secrets('AWS_SECRET')
+    #key = os.getenv('AWS_KEY')
+    #secret = os.getenv('AWS_SECRET')
+
+    st.write("key de acesso ao AWS")
+    st.write(key)
+
     bucket_name = "brzd-dev-images"
     s3 = boto3.client(
         's3',
         aws_access_key_id=key,
-        aws_secret_access_key=access
+        aws_secret_access_key=secret
     )
 
 def main():
-    
+
     st.set_page_config(
     page_title="Classifica radiologia",
     )
@@ -98,7 +108,7 @@ def main():
     #classifica
     if image is not None:
         previsao(interpreter,image)
-        valida_imagem_duplicada(image,'st1','uye9')
+        valida_imagem_duplicada(image)
 
 if __name__ == "__main__":
     main()
