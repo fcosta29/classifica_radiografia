@@ -9,6 +9,7 @@ import numpy as np
 import plotly.express as px
 from PIL import Image
 import imagehash
+import hashlib
 
 
 @st.cache_resource
@@ -16,6 +17,14 @@ import imagehash
 def calcular_similaridade_hash_arquivo_local(caminho):
     imagem = Image.open(caminho)
     return imagehash.phash(imagem)  # ou dhash, ahash
+
+def calcular_hash_arquivo_local(caminho):
+    """Calcula o hash MD5 de um arquivo local."""
+    hash_md5 = hashlib.md5()
+    with open(caminho, 'rb') as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
 
 def carrega_modelo():
           #https://drive.google.com/file/d/1jxwhxLYwmuSNOCLgQ8h46MHpyDpPeQ9o/view?usp=drive_link

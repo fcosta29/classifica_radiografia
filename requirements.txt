@@ -7,3 +7,4 @@ plotly
 tensorflow
 boto3
 imagehash
+hashlib
