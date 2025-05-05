@@ -85,7 +85,7 @@ def valida_imagem_duplicada(image):
     #secret = os.getenv('AWS_SECRET')
 
     st.write("key de acesso ao AWS")
-    st.write(key)
+    st.write(aws_key)
 
     bucket_name = "brzd-dev-images"
     s3 = boto3.client(
