@@ -74,6 +74,8 @@ def previsao(interpreter, image):
     
     st.plotly_chart(fig)
 
+def valida_imagem_duplicada(image):
+    print('teste')
 
 def main():
     
@@ -90,6 +92,7 @@ def main():
     #classifica
     if image is not None:
         previsao(interpreter,image)
+        valida_imagem_duplicada(image)
 
 if __name__ == "__main__":
     main()
