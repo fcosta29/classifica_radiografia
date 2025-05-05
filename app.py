@@ -79,8 +79,8 @@ def previsao(interpreter, image):
 
 def valida_imagem_duplicada(image):
 
-    key = st.secrets["AWS_KEY"]
-    secret = st.secrets('AWS_SECRET')
+    aws_key = st.secrets["AWS_KEY"]
+    aws_secret = st.secrets["AWS_SECRET"]
     #key = os.getenv('AWS_KEY')
     #secret = os.getenv('AWS_SECRET')
 
@@ -90,8 +90,8 @@ def valida_imagem_duplicada(image):
     bucket_name = "brzd-dev-images"
     s3 = boto3.client(
         's3',
-        aws_access_key_id=key,
-        aws_secret_access_key=secret
+        aws_access_key_id=aws_key,
+        aws_secret_access_key=aws_secret
     )
 
 def main():
