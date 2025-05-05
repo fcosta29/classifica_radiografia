@@ -2,7 +2,6 @@ import streamlit as st
 import os
 import boto3
 import gdown
-import imagehash
 import hashlib
 import cv2
 import tensorflow as tf
@@ -11,6 +10,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 from PIL import Image
+import imagehash
 
 
 @st.cache_resource
