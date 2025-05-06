@@ -10,7 +10,6 @@ import plotly.express as px
 from PIL import Image
 import imagehash
 import hashlib
-import cv2
 
 
 @st.cache_resource
@@ -37,8 +36,8 @@ def calcular_similaridade_hash_bytes(dados_bytes):
 
 def comparar_imagem_caminho_com_bytes(img_path, img_bytes, tamanho=(200, 200), limite_iguais=0.95, limite_semelhantes=0.90):
     # Lê a imagem do caminho
-    img1 = cv2.imread(img_path)
-    '''if img1 is None:
+    '''img1 = cv2.imread(img_path)
+    if img1 is None:
         raise ValueError("Imagem do caminho não pôde ser carregada.")
 
     # Lê a imagem a partir dos bytes
