@@ -18,6 +18,10 @@ def calcular_similaridade_hash_arquivo_local(caminho):
     imagem = Image.open(caminho)
     return imagehash.phash(imagem)  # ou dhash, ahash
 
+def calcular_similaridade_hash_bytes(dados_bytes):
+    imagem = Image.open(io.BytesIO(dados_bytes))
+    return imagehash.phash(imagem)
+
 def calcular_hash_arquivo_local(caminho):
 
     """Calcula o hash MD5 de um arquivo local."""
@@ -26,6 +30,11 @@ def calcular_hash_arquivo_local(caminho):
         for chunk in iter(lambda: f.read(4096), b""):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
+
+def calcular_hash_bytes(dados_bytes):
+    """Calcula o hash MD5 de dados binários."""
+    return hashlib.md5(dados_bytes).hexdigest()
+
 
 def carrega_modelo():
           #https://drive.google.com/file/d/1jxwhxLYwmuSNOCLgQ8h46MHpyDpPeQ9o/view?usp=drive_link
