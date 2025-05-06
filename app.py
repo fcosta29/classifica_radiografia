@@ -11,6 +11,7 @@ from PIL import Image
 import imagehash
 import hashlib
 import cv2
+import json
 
 
 @st.cache_resource
@@ -78,8 +79,11 @@ def valida_imagem_duplicada(image):
     #key = os.getenv('AWS_KEY')
     #secret = os.getenv('AWS_SECRET')
 
-    #st.write("key de acesso ao AWS")
-    #st.write(aws_key)
+    st.write("key de acesso ao AWS")
+    st.write(aws_key)
+
+    st.write("secret de acesso ao AWS")
+    st.write(aws_secret)
 
     bucket_name = "brzd-dev-images"
     s3 = boto3.client(
@@ -90,44 +94,17 @@ def valida_imagem_duplicada(image):
 
     try:
         response = s3.list_objects_v2(Bucket=bucket_name)
+        st.write("Response")
+        st.json(json.loads(json.dumps(response, default=str)))
         if 'Contents' in response:
             # Calcula hash da imagem local
             local_hash = calcular_hash_arquivo_local(image)
             local_similaridade = calcular_similaridade_hash_arquivo_local(image)
 
-            for obj in response['Contents']:
-                if obj['Key'].endswith('.jpg'):
-                    st.write("NOME DO ARQUIVO")
-                    st.write(obj['Key'])
-                    # Baixa imagem do S3 para memória
-                    obj_data = s3.get_object(Bucket=bucket_name, Key=obj['Key'])
-                    s3_image_bytes = obj_data['Body'].read()
-
-                    # Calcula hash da imagem do S3
-                    s3_hash = calcular_hash_bytes(s3_image_bytes)
-                    # Calcula similaridade da imagem do S3
-                    s3_similaridade = calcular_similaridade_hash_bytes(s3_image_bytes)
-     
-                    # Compara
-                    if s3_hash == local_hash:
-                        st.write(f"IMAGEM COM HASH IGUAL: {obj['Key']}")
-                        break
-                    else:                     
-                        if local_similaridade == s3_similaridade:
-                            st.write(f"IMAGEM COM SIMILARIDADE: {obj['Key']}")
-                            break
-                        else:
-
-                            resultado, porcentagem = comparar_imagem_caminho_com_bytes(image, s3_image_bytes) 
-
-                            if resultado == "iguais":
-                                st.write(f"IMAGEM IGUAIS, ACERTIVIDADE {porcentagem * 100}% DE SEMELHANÇA")
-                                break
-                            else:
-                                st.write(f"IMAGEM NÃO IGUAIS, ACERTIVIDADE {porcentagem * 100}% DE SEMELHANÇA")
+           
 
         else:
-            st.write(f"NENHUMA IMAGEM ENCONTRADA NO BUCKET")
+            st.write("NENHUMA IMAGEM ENCONTRADA NO BUCKET")
     except Exception as e:
         print(f"Erro: {e}")
 
