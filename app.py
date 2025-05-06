@@ -79,11 +79,11 @@ def valida_imagem_duplicada(image):
     #key = os.getenv('AWS_KEY')
     #secret = os.getenv('AWS_SECRET')
 
-    st.write("key de acesso ao AWS")
-    st.write(aws_key)
+    #st.write("key de acesso ao AWS")
+    #st.write(aws_key)
 
-    st.write("secret de acesso ao AWS")
-    st.write(aws_secret)
+    #st.write("secret de acesso ao AWS")
+    #st.write(aws_secret)
 
     bucket_name = "brzd-dev-images"
     s3 = boto3.client(
@@ -101,6 +101,10 @@ def valida_imagem_duplicada(image):
             local_hash = calcular_hash_arquivo_local(image)
             local_similaridade = calcular_similaridade_hash_arquivo_local(image)
 
+            st.write("HASH IMAGE")
+            st.write(local_hash)
+            st.write("HASH SIMILARIDADE")
+            st.write(local_similaridade)
            
 
         else:
