@@ -8,13 +8,15 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 from PIL import Image
-#import imagehash
+import imagehash
 #import hashlib
 
 
 @st.cache_resource
 
-
+def calcular_similaridade_hash_arquivo_local(caminho):
+    imagem = Image.open(caminho)
+    return imagehash.phash(imagem)  # ou dhash, ahash
 
 def carrega_modelo():
           #https://drive.google.com/file/d/1jxwhxLYwmuSNOCLgQ8h46MHpyDpPeQ9o/view?usp=drive_link
