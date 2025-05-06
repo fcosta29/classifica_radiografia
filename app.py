@@ -97,6 +97,8 @@ def valida_imagem_duplicada(image):
 
             for obj in response['Contents']:
                 if obj['Key'].endswith('.jpg'):
+                    st.write("NOME DO ARQUIVO")
+                    st.write(obj['Key'])
                     # Baixa imagem do S3 para memória
                     obj_data = s3.get_object(Bucket=bucket_name, Key=obj['Key'])
                     s3_image_bytes = obj_data['Body'].read()
@@ -119,10 +121,10 @@ def valida_imagem_duplicada(image):
                             resultado, porcentagem = comparar_imagem_caminho_com_bytes(image, s3_image_bytes) 
 
                             if resultado == "iguais":
-                                st.write(f"IMAGEM COM {porcentagem * 100}% DE SEMELHANÇA")
+                                st.write(f"IMAGEM IGUAIS, ACERTIVIDADE {porcentagem * 100}% DE SEMELHANÇA")
                                 break
                             else:
-                                st.write(f"IMAGEM COM {porcentagem * 100}% DE SEMELHANÇA")
+                                st.write(f"IMAGEM NÃO IGUAIS, ACERTIVIDADE {porcentagem * 100}% DE SEMELHANÇA")
 
         else:
             st.write(f"NENHUMA IMAGEM ENCONTRADA NO BUCKET")
