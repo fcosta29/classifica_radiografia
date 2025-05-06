@@ -10,7 +10,7 @@ import plotly.express as px
 from PIL import Image
 import imagehash
 import hashlib
-import cv2
+#import cv2
 
 
 @st.cache_resource
@@ -36,7 +36,7 @@ def calcular_hash_bytes(dados_bytes):
     """Calcula o hash MD5 de dados binários."""
     return hashlib.md5(dados_bytes).hexdigest()
 
-def comparar_imagem_caminho_com_bytes(img_path, img_bytes, tamanho=(200, 200), limite_iguais=0.95, limite_semelhantes=0.90):
+'''def comparar_imagem_caminho_com_bytes(img_path, img_bytes, tamanho=(200, 200), limite_iguais=0.95, limite_semelhantes=0.90):
     # Lê a imagem do caminho
     img1 = cv2.imread(img_path)
     if img1 is None:
@@ -69,7 +69,7 @@ def comparar_imagem_caminho_com_bytes(img_path, img_bytes, tamanho=(200, 200), l
     else:
         resultado = "diferentes"
 
-    return resultado, round(similaridade, 2)
+    return resultado, round(similaridade, 2)'''
 
 def valida_imagem_duplicada(image):
 
