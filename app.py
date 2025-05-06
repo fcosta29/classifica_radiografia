@@ -35,6 +35,42 @@ def calcular_hash_bytes(dados_bytes):
     """Calcula o hash MD5 de dados binários."""
     return hashlib.md5(dados_bytes).hexdigest()
 
+def comparar_imagem_caminho_com_bytes(img_path, img_bytes, tamanho=(200, 200), limite_iguais=0.95, limite_semelhantes=0.90):
+    print('Teste')
+    # Lê a imagem do caminho
+    '''img1 = cv2.imread(img_path)
+    if img1 is None:
+        raise ValueError("Imagem do caminho não pôde ser carregada.")
+
+    # Lê a imagem a partir dos bytes
+    nparr = np.frombuffer(img_bytes, np.uint8)
+    img2 = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    if img2 is None:
+        raise ValueError("Imagem dos bytes não pôde ser decodificada.")
+
+    # Redimensiona ambas para o mesmo tamanho
+    img1 = cv2.resize(img1, tamanho)
+    img2 = cv2.resize(img2, tamanho)
+
+    # Calcula a diferença absoluta e converte para escala de cinza
+    diff = cv2.absdiff(img1, img2)
+    diff_gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
+
+    # Soma os valores das diferenças
+    score = np.sum(diff_gray)
+    max_diff = tamanho[0] * tamanho[1] * 255
+    similaridade = 1 - (score / max_diff)
+
+    # Classificação com base nos limites
+    if similaridade >= limite_iguais:
+        resultado = "iguais"
+    elif similaridade >= limite_semelhantes:
+        resultado = "semelhantes"
+    else:
+        resultado = "diferentes"
+
+    return resultado, round(similaridade, 2)'''
+
 def valida_imagem_duplicada(image):
 
     aws_key = st.secrets["AWS_KEY"]
@@ -133,7 +169,7 @@ def main():
     #classifica
     if image is not None:
         previsao(interpreter,image)
-        #valida_imagem_duplicada(image)
+        valida_imagem_duplicada(image)
 
 if __name__ == "__main__":
     main()
