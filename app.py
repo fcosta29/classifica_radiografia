@@ -1,6 +1,6 @@
 import streamlit as st
-import os
-import boto3
+#import os
+#import boto3
 import gdown
 import tensorflow as tf
 import io
@@ -8,67 +8,13 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 from PIL import Image
-import imagehash
-import hashlib
+#import imagehash
+#import hashlib
 
 
 @st.cache_resource
 
-def calcular_similaridade_hash_arquivo_local(caminho):
-    imagem = Image.open(caminho)
-    return imagehash.phash(imagem)  # ou dhash, ahash
 
-def calcular_hash_arquivo_local(caminho):
-    """Calcula o hash MD5 de um arquivo local."""
-    hash_md5 = hashlib.md5()
-    with open(caminho, 'rb') as f:
-        for chunk in iter(lambda: f.read(4096), b""):
-            hash_md5.update(chunk)
-    return hash_md5.hexdigest()
-
-def calcular_hash_bytes(dados_bytes):
-    """Calcula o hash MD5 de dados binários."""
-    return hashlib.md5(dados_bytes).hexdigest()
-
-def calcular_similaridade_hash_bytes(dados_bytes):
-    imagem = Image.open(io.BytesIO(dados_bytes))
-    return imagehash.phash(imagem)
-
-def comparar_imagem_caminho_com_bytes(img_path, img_bytes, tamanho=(200, 200), limite_iguais=0.95, limite_semelhantes=0.90):
-    print('Teste')
-    # Lê a imagem do caminho
-    '''img1 = cv2.imread(img_path)
-    if img1 is None:
-        raise ValueError("Imagem do caminho não pôde ser carregada.")
-
-    # Lê a imagem a partir dos bytes
-    nparr = np.frombuffer(img_bytes, np.uint8)
-    img2 = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    if img2 is None:
-        raise ValueError("Imagem dos bytes não pôde ser decodificada.")
-
-    # Redimensiona ambas para o mesmo tamanho
-    img1 = cv2.resize(img1, tamanho)
-    img2 = cv2.resize(img2, tamanho)
-
-    # Calcula a diferença absoluta e converte para escala de cinza
-    diff = cv2.absdiff(img1, img2)
-    diff_gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
-
-    # Soma os valores das diferenças
-    score = np.sum(diff_gray)
-    max_diff = tamanho[0] * tamanho[1] * 255
-    similaridade = 1 - (score / max_diff)
-
-    # Classificação com base nos limites
-    if similaridade >= limite_iguais:
-        resultado = "iguais"
-    elif similaridade >= limite_semelhantes:
-        resultado = "semelhantes"
-    else:
-        resultado = "diferentes"
-
-    return resultado, round(similaridade, 2)'''
 
 def carrega_modelo():
           #https://drive.google.com/file/d/1jxwhxLYwmuSNOCLgQ8h46MHpyDpPeQ9o/view?usp=drive_link
@@ -135,23 +81,6 @@ def previsao(interpreter, image):
     
     st.plotly_chart(fig)
 
-def valida_imagem_duplicada(image):
-
-    aws_key = st.secrets["AWS_KEY"]
-    aws_secret = st.secrets["AWS_SECRET"]
-    #key = os.getenv('AWS_KEY')
-    #secret = os.getenv('AWS_SECRET')
-
-    st.write("key de acesso ao AWS")
-    st.write(aws_key)
-
-    bucket_name = "brzd-dev-images"
-    s3 = boto3.client(
-        's3',
-        aws_access_key_id=aws_key,
-        aws_secret_access_key=aws_secret
-    )
-
 def main():
 
     st.set_page_config(
@@ -167,7 +96,7 @@ def main():
     #classifica
     if image is not None:
         previsao(interpreter,image)
-        valida_imagem_duplicada(image)
+        #valida_imagem_duplicada(image)
 
 if __name__ == "__main__":
     main()
