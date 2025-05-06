@@ -35,6 +35,7 @@ def calcular_similaridade_hash_bytes(dados_bytes):
     return imagehash.phash(imagem)
 
 def comparar_imagem_caminho_com_bytes(img_path, img_bytes, tamanho=(200, 200), limite_iguais=0.95, limite_semelhantes=0.90):
+    print('Teste')
     # Lê a imagem do caminho
     '''img1 = cv2.imread(img_path)
     if img1 is None:
