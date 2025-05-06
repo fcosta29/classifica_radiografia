@@ -7,7 +7,7 @@ plotly
 tensorflow
 imagehash
 boto3
-#opencv-python
+opencv-python
 
 
 

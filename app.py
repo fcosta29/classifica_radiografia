@@ -10,7 +10,7 @@ import plotly.express as px
 from PIL import Image
 import imagehash
 import hashlib
-#import cv2
+import cv2
 
 
 @st.cache_resource
