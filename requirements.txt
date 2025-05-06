@@ -6,3 +6,4 @@ gdown
 plotly
 tensorflow
 imagehash
+boto3

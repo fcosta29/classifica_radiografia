@@ -1,6 +1,6 @@
 import streamlit as st
 #import os
-#import boto3
+import boto3
 import gdown
 import tensorflow as tf
 import io
@@ -34,6 +34,23 @@ def calcular_hash_arquivo_local(caminho):
 def calcular_hash_bytes(dados_bytes):
     """Calcula o hash MD5 de dados binários."""
     return hashlib.md5(dados_bytes).hexdigest()
+
+def valida_imagem_duplicada(image):
+
+    aws_key = st.secrets["AWS_KEY"]
+    aws_secret = st.secrets["AWS_SECRET"]
+    #key = os.getenv('AWS_KEY')
+    #secret = os.getenv('AWS_SECRET')
+
+    st.write("key de acesso ao AWS")
+    st.write(aws_key)
+
+    bucket_name = "brzd-dev-images"
+    s3 = boto3.client(
+        's3',
+        aws_access_key_id=aws_key,
+        aws_secret_access_key=aws_secret
+    )
 
 
 def carrega_modelo():
