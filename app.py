@@ -28,12 +28,12 @@ def calcular_similaridade_hash_bytes(dados_bytes):
     imagem = Image.open(io.BytesIO(dados_bytes))
     return imagehash.phash(imagem)
 
-def calcular_hash_arquivo_local(image):
+def calcular_hash_arquivo_local(image_bytes):
 
     """Calcula o hash MD5 de um arquivo local."""
     try:
         hash_md5 = hashlib.md5()
-        with open(image, 'rb') as f:
+        with io.BytesIO(image_bytes) as f:
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_md5.update(chunk)
         return hash_md5.hexdigest()
