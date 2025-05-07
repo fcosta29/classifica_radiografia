@@ -139,23 +139,19 @@ def carrega_imagem():
     uploaded_file = st.file_uploader('Escolha uma Radiografia', type=['jpg','jpeg','png']) 
 
     if uploaded_file is not None:
-        image_data = uploaded_file.read()
+        image_data = uploaded_file.read()  # Conteúdo binário da imagem
         image = Image.open(io.BytesIO(image_data))   
 
         st.image(image)
         st.success('Imagem foi carregada com sucesso')
 
-        # Redimensiona a imagem para 220x200 (necessário para o modelo)
+        # Redimensiona a imagem para 200x200 (necessário para o modelo)
         image = image.resize((200, 200))
-
-        # Converte a imagem para RGBA (adiciona o canal alfa, se necessário)
-        # image = image.convert("RGBA")
-
-        image = np.array(image,dtype=np.float32)
-        image = image / 255.0
+        image = np.array(image, dtype=np.float32) / 255.0
         image = np.expand_dims(image, axis=0)
 
-        return image
+        return image, image_data  # <- retorna a imagem e os bytes para hash
+    return None, None
 
 def previsao(interpreter, image):
 
@@ -199,11 +195,11 @@ def main():
     #carrega modelo
     interpreter = carrega_modelo()
     #carrega imagem
-    image = carrega_imagem()
+    image, image_bytes = carrega_imagem()
     #classifica
     if image is not None:
         previsao(interpreter,image)
-        valida_imagem_duplicada(image)
+        valida_imagem_duplicada(image_bytes)
 
 if __name__ == "__main__":
     main()
