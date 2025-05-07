@@ -17,8 +17,12 @@ import json
 @st.cache_resource
 
 def calcular_similaridade_hash_arquivo_local(caminho):
-    imagem = Image.open(caminho)
-    return imagehash.phash(imagem)  # ou dhash, ahash
+    try:
+        imagem = Image.open(caminho)
+        return imagehash.phash(imagem)  # ou dhash, ahash
+    except Exception as e:
+        st.write("ERRO NO HASH ARQUIVO LOCAL, SIMILARIDADE")
+        st.write(e)
 
 def calcular_similaridade_hash_bytes(dados_bytes):
     imagem = Image.open(io.BytesIO(dados_bytes))
@@ -34,7 +38,8 @@ def calcular_hash_arquivo_local(caminho):
                 hash_md5.update(chunk)
         return hash_md5.hexdigest()
     except Exception as e:
-        print(f"Erro: {e}")
+        st.write("ERRO NO HASH ARQUIVO LOCAL")
+        st.write(e)
 
 def calcular_hash_bytes(dados_bytes):
     """Calcula o hash MD5 de dados binários."""
