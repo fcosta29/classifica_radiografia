@@ -27,11 +27,14 @@ def calcular_similaridade_hash_bytes(dados_bytes):
 def calcular_hash_arquivo_local(caminho):
 
     """Calcula o hash MD5 de um arquivo local."""
-    hash_md5 = hashlib.md5()
-    with open(caminho, 'rb') as f:
-        for chunk in iter(lambda: f.read(4096), b""):
-            hash_md5.update(chunk)
-    return hash_md5.hexdigest()
+    try:
+        hash_md5 = hashlib.md5()
+        with open(caminho, 'rb') as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
+    except Exception as e:
+        print(f"Erro: {e}")
 
 def calcular_hash_bytes(dados_bytes):
     """Calcula o hash MD5 de dados binários."""
