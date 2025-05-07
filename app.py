@@ -33,9 +33,9 @@ def calcular_hash_arquivo_local(image):
     """Calcula o hash MD5 de um arquivo local."""
     try:
         hash_md5 = hashlib.md5()
-        for chunk in iter(lambda: image.read(4096), b""):
-            hash_md5.update(chunk)
-        image.seek(0)  # Importante: reseta o ponteiro do arquivo para uso posterior
+        with open(image, 'rb') as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
         return hash_md5.hexdigest()
     except Exception as e:
         st.write("ERRO NO HASH ARQUIVO LOCAL")
@@ -196,6 +196,8 @@ def main():
     interpreter = carrega_modelo()
     #carrega imagem
     image, image_bytes = carrega_imagem()
+    st.write("Bytes da imagem")
+    st.write(image_bytes)
     #classifica
     if image is not None:
         previsao(interpreter,image)
