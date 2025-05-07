@@ -16,10 +16,17 @@ import json
 
 @st.cache_resource
 
-def calcular_similaridade_hash_arquivo_local(caminho):
+def calcular_similaridade_hash_arquivo_local(image_bytes, metodo='phash'):
     try:
-        imagem = Image.open(caminho)
-        return imagehash.phash(imagem)  # ou dhash, ahash
+        imagem = Image.open(io.BytesIO(image_bytes)).convert('RGB')  # Garante modo RGB
+        if metodo == 'phash':
+            return imagehash.phash(imagem)
+        elif metodo == 'ahash':
+            return imagehash.average_hash(imagem)
+        elif metodo == 'dhash':
+            return imagehash.dhash(imagem)
+        else:
+            raise ValueError("Método de hash inválido: use 'phash', 'ahash' ou 'dhash'")
     except Exception as e:
         st.write("ERRO NO HASH ARQUIVO LOCAL, SIMILARIDADE")
         st.write(e)
@@ -81,7 +88,7 @@ def comparar_imagem_caminho_com_bytes(img_path, img_bytes, tamanho=(200, 200), l
 
     return resultado, round(similaridade, 2)
 
-def valida_imagem_duplicada(image):
+def valida_imagem_duplicada(image_bytes):
 
     aws_key = st.secrets["AWS_KEY"]
     aws_secret = st.secrets["AWS_SECRET"]
@@ -107,8 +114,8 @@ def valida_imagem_duplicada(image):
         st.json(json.loads(json.dumps(response, default=str)))
         if 'Contents' in response:
             # Calcula hash da imagem local
-            local_hash = calcular_hash_arquivo_local(image)
-            local_similaridade = calcular_similaridade_hash_arquivo_local(image)
+            local_hash = calcular_hash_arquivo_local(image_bytes)
+            local_similaridade = calcular_similaridade_hash_arquivo_local(image_bytes)
 
             st.write("HASH IMAGE")
             st.write(local_hash)
@@ -196,8 +203,8 @@ def main():
     interpreter = carrega_modelo()
     #carrega imagem
     image, image_bytes = carrega_imagem()
-    st.write("Bytes da imagem")
-    st.write(image_bytes)
+    #st.write("Bytes da imagem")
+    #st.write(image_bytes)
     #classifica
     if image is not None:
         previsao(interpreter,image)
