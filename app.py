@@ -136,37 +136,27 @@ def valida_imagem_duplicada(image_bytes):
                     s3_hash = calcular_hash_bytes(s3_image_bytes)
                     s3_similaridade = calcular_similaridade_hash_bytes(s3_image_bytes)
 
-                    resultado, porcentagem = comparar_semelhanca_imagens(image_bytes, s3_image_bytes) 
-
-                    if resultado == "iguais":
-                        st.success(f"O upload tem {porcentagem * 100}% de semelhança com a imagem {obj['Key']}")
+                    if s3_hash == local_hash:
+                        st.success(f"O upload tem o mesmo hash que {obj['Key']} que está no repositório")
                         image = Image.open(io.BytesIO(s3_image_bytes)) 
-                        st.image(image)
+                        st.image(image) 
                         break
+                    else:                     
+                        if local_similaridade == s3_similaridade:
+                            st.warning(f"O upload tem similaridade com a imagem {obj['Key']} que está no repositório")
+                            image = Image.open(io.BytesIO(s3_image_bytes)) 
+                            st.image(image) 
+                            break
+                        else:
+                            resultado, porcentagem = comparar_semelhanca_imagens(image_bytes, s3_image_bytes) 
 
-                    #if s3_hash == local_hash:
-                        #st.success(f"O upload tem o mesmo hash que {obj['Key']} que está no repositório")
-                        #image = Image.open(io.BytesIO(s3_image_bytes)) 
-                        #st.image(image) 
-                        #break
-                    #else:                     
-                     #   if local_similaridade == s3_similaridade:
-                      #      st.warning(f"O upload tem similaridade com a imagem {obj['Key']} que está no repositório")
-                       #     image = Image.open(io.BytesIO(s3_image_bytes)) 
-                        #    st.image(image) 
-                         #   break
-                        #else:
-
-                         #   resultado, porcentagem = comparar_semelhanca_imagens(image_bytes, s3_image_bytes) 
-
-                          #  if resultado == "iguais":
-                           #     st.success(f"O upload tem {porcentagem * 100}% de semelhança com a imagem {obj['Key']}")
-                            #    image = Image.open(io.BytesIO(s3_image_bytes)) 
-                             #   st.image(image)
-                              #  break
+                            if resultado == "iguais":
+                                st.success(f"O upload tem {porcentagem * 100}% de semelhança com a imagem {obj['Key']}")
+                                image = Image.open(io.BytesIO(s3_image_bytes)) 
+                                st.image(image)
+                                break
                     #time.sleep(0.1)  # Pequena pausa para permitir que a interface atualize 
-
-                            
+                                                
                     contador += 1 # Atualiza barra de progresso
                     progresso.progress(contador / total_imagens)       
 
