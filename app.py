@@ -121,7 +121,7 @@ def valida_imagem_duplicada(image_bytes):
             st.write(local_hash)
             st.write("HASH SIMILARIDADE")
             st.write(local_similaridade)
-            
+
             contador = 0
 
             for obj in response['Contents']:
@@ -130,10 +130,11 @@ def valida_imagem_duplicada(image_bytes):
                     obj_data = s3.get_object(Bucket=bucket_name, Key=obj['Key'])
                     s3_image_bytes = obj_data['Body'].read()
                     
-                    if contador < 2:
-                        st.write("Bytes imagem bucket")
-                        st.write(s3_image_bytes)
-                        contador + 1
+                    while contador < 2 :
+                        s3_hash = calcular_hash_arquivo_local(s3_image_bytes)
+                        st.write("HASH s3")
+                        st.write(s3_hash)
+                        contador +=1
            
 
         else:
