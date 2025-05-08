@@ -83,6 +83,7 @@ def comparar_imagem_com_bytes(img_path, img_bytes, tamanho=(200, 200), limite_ig
 
 def valida_imagem_duplicada(image_bytes):
 
+    st.write("Validando Imagem duplicada")
     progresso = st.progress(0)  # Cria a barra de progresso
     aws_key = st.secrets["AWS_KEY"]
     aws_secret = st.secrets["AWS_SECRET"]
@@ -122,26 +123,26 @@ def valida_imagem_duplicada(image_bytes):
             #st.write("HASH SIMILARIDADE")
             #st.write(local_similaridade)
 
-            contador = 0  # Para controlar o progresso
+            contador = 0  # Para controlar o progresso            
 
             for obj in response['Contents']:
                 if obj['Key'].endswith('.jpg'):
-                    with st.spinner(f'Comparando com {obj["Key"]}...'):
+                    #with st.spinner(f'Comparando com {obj["Key"]}...'):
                         # Baixa imagem do S3 para memória
-                        obj_data = s3.get_object(Bucket=bucket_name, Key=obj['Key'])
-                        s3_image_bytes = obj_data['Body'].read()
+                    obj_data = s3.get_object(Bucket=bucket_name, Key=obj['Key'])
+                    s3_image_bytes = obj_data['Body'].read()
 
-                        s3_hash = calcular_hash_bytes(s3_image_bytes)
-                        s3_similaridade = calcular_similaridade_hash_bytes(s3_image_bytes)
+                    s3_hash = calcular_hash_bytes(s3_image_bytes)
+                    s3_similaridade = calcular_similaridade_hash_bytes(s3_image_bytes)
 
-                        if s3_hash == local_hash:
-                            st.success(f"O upload tem o mesmo hash que {obj['Key']} que está no repositório")
+                    if s3_hash == local_hash:
+                        st.success(f"O upload tem o mesmo hash que {obj['Key']} que está no repositório")
+                        break
+                    else:                     
+                        if local_similaridade == s3_similaridade:
+                            st.warning(f"O upload tem similaridade com a imagem {obj['Key']} que está no repositório")
                             break
-                        else:                     
-                            if local_similaridade == s3_similaridade:
-                                st.warning(f"O upload tem similaridade com a imagem {obj['Key']} que está no repositório")
-                                break
-                    time.sleep(0.1)  # Pequena pausa para permitir que a interface atualize 
+                    #time.sleep(0.1)  # Pequena pausa para permitir que a interface atualize 
 
                             
                     contador += 1 # Atualiza barra de progresso
