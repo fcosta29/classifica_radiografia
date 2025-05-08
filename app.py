@@ -110,8 +110,8 @@ def valida_imagem_duplicada(image_bytes):
             imagens_jpg = [obj for obj in response['Contents'] if obj['Key'].endswith('.jpg')]
             total_imagens = len(imagens_jpg)
 
-            st.write("Total de imagens")
-            st.write(total_imagens)
+            #st.write("Total de imagens")
+            #st.write(total_imagens)
 
             # Calcula hash da imagem local
             local_hash = calcular_hash_bytes(image_bytes)
@@ -145,7 +145,7 @@ def valida_imagem_duplicada(image_bytes):
 
                             
                     contador += 1 # Atualiza barra de progresso
-                    #progresso.progress(contador / total_imagens)       
+                    progresso.progress(contador / total_imagens)       
 
            
 
