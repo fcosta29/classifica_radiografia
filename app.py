@@ -136,20 +136,13 @@ def valida_imagem_duplicada(image_bytes):
                     s3_hash = calcular_hash_bytes(s3_image_bytes)
                     s3_similaridade = calcular_similaridade_hash_bytes(s3_image_bytes)
 
-                    if local_similaridade == s3_similaridade:
-                        st.warning(f"O upload tem similaridade com a imagem {obj['Key']} que está no repositório")
+                    resultado, porcentagem = comparar_semelhanca_imagens(image_bytes, s3_image_bytes) 
+
+                    if resultado == "iguais":
+                        st.success(f"O upload tem {porcentagem * 100}% de semelhança com a imagem {obj['Key']}")
                         image = Image.open(io.BytesIO(s3_image_bytes)) 
-                        st.image(image) 
+                        st.image(image)
                         break
-                    else:
-
-                        resultado, porcentagem = comparar_semelhanca_imagens(image_bytes, s3_image_bytes) 
-
-                        if resultado == "iguais":
-                            st.success(f"O upload tem {porcentagem * 100}% de semelhança com a imagem {obj['Key']}")
-                            image = Image.open(io.BytesIO(s3_image_bytes)) 
-                            st.image(image)
-                            break
 
                     #if s3_hash == local_hash:
                         #st.success(f"O upload tem o mesmo hash que {obj['Key']} que está no repositório")
