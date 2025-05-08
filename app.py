@@ -16,7 +16,7 @@ import json
 
 @st.cache_resource
 
-def calcular_similaridade_hash_arquivo_local(image_bytes, metodo='phash'):
+def calcular_similaridade_hash_bytes(image_bytes, metodo='phash'):
     try:
         imagem = Image.open(io.BytesIO(image_bytes)).convert('RGB')  # Garante modo RGB
         if metodo == 'phash':
@@ -31,11 +31,7 @@ def calcular_similaridade_hash_arquivo_local(image_bytes, metodo='phash'):
         st.write("ERRO NO HASH ARQUIVO LOCAL, SIMILARIDADE")
         st.write(e)
 
-def calcular_similaridade_hash_bytes(dados_bytes):
-    imagem = Image.open(io.BytesIO(dados_bytes))
-    return imagehash.phash(imagem)
-
-def calcular_hash_arquivo_local(image_bytes):
+def calcular_hash_bytes(image_bytes):
 
     """Calcula o hash MD5 de um arquivo local."""
     try:
@@ -49,11 +45,7 @@ def calcular_hash_arquivo_local(image_bytes):
         st.write(e)
         return None
 
-def calcular_hash_bytes(dados_bytes):
-    """Calcula o hash MD5 de dados binários."""
-    return hashlib.md5(dados_bytes).hexdigest()
-
-def comparar_imagem_caminho_com_bytes(img_path, img_bytes, tamanho=(200, 200), limite_iguais=0.95, limite_semelhantes=0.90):
+def comparar_imagem_com_bytes(img_path, img_bytes, tamanho=(200, 200), limite_iguais=0.95, limite_semelhantes=0.90):
     # Lê a imagem do caminho
     img1 = cv2.imread(img_path)
     if img1 is None:
@@ -110,31 +102,35 @@ def valida_imagem_duplicada(image_bytes):
 
     try:
         response = s3.list_objects_v2(Bucket=bucket_name)
-        st.write("Response")
-        st.json(json.loads(json.dumps(response, default=str)))
+        #st.write("Response")
+        #st.json(json.loads(json.dumps(response, default=str)))
         if 'Contents' in response:
             # Calcula hash da imagem local
-            local_hash = calcular_hash_arquivo_local(image_bytes)
-            local_similaridade = calcular_similaridade_hash_arquivo_local(image_bytes)
+            local_hash = calcular_hash_bytes(image_bytes)
+            local_similaridade = calcular_similaridade_hash_bytes(image_bytes)
 
-            st.write("HASH IMAGE")
-            st.write(local_hash)
-            st.write("HASH SIMILARIDADE")
-            st.write(local_similaridade)
-
-            contador = 0
+            #st.write("HASH IMAGE")
+            #st.write(local_hash)
+            #st.write("HASH SIMILARIDADE")
+            #st.write(local_similaridade)
 
             for obj in response['Contents']:
                 if obj['Key'].endswith('.jpg'):
                     # Baixa imagem do S3 para memória
                     obj_data = s3.get_object(Bucket=bucket_name, Key=obj['Key'])
                     s3_image_bytes = obj_data['Body'].read()
-                    
-                    while contador < 2 :
-                        s3_hash = calcular_hash_arquivo_local(s3_image_bytes)
-                        st.write("HASH s3")
-                        st.write(s3_hash)
-                        contador +=1
+
+                    s3_hash = calcular_hash_bytes(s3_image_bytes)
+                    s3_similaridade = calcular_similaridade_hash_bytes(s3_image_bytes)
+
+                    if s3_hash == local_hash:
+                        st.write(f"IMAGEM DE UPLOAD É IGUAL A {obj['Key']} QUE ESTÁ NO REPOSITÓRIO")
+                        break
+                    else:                     
+                        if local_similaridade == s3_similaridade:
+                            st.write(f"A IMAGEM TEM A MESMA SIMILARIDADE DA IMAGEM  {obj['Key']} QUE ESTÁ NO REPOSITÓRIO")
+                            break
+
            
 
         else:
@@ -222,6 +218,7 @@ def main():
     #classifica
     if image is not None:
         previsao(interpreter,image)
+        #Valida
         valida_imagem_duplicada(image_bytes)
 
 if __name__ == "__main__":
