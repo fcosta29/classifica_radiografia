@@ -115,22 +115,22 @@ def valida_imagem_duplicada(image_bytes):
             #st.write(local_similaridade)
 
             for obj in response['Contents']:
-                st.spinner('Carregando...')
                 if obj['Key'].endswith('.jpg'):
-                    # Baixa imagem do S3 para memória
-                    obj_data = s3.get_object(Bucket=bucket_name, Key=obj['Key'])
-                    s3_image_bytes = obj_data['Body'].read()
+                    with st.spinner(f'Comparando com {obj["Key"]}...'):
+                        # Baixa imagem do S3 para memória
+                        obj_data = s3.get_object(Bucket=bucket_name, Key=obj['Key'])
+                        s3_image_bytes = obj_data['Body'].read()
 
-                    s3_hash = calcular_hash_bytes(s3_image_bytes)
-                    s3_similaridade = calcular_similaridade_hash_bytes(s3_image_bytes)
+                        s3_hash = calcular_hash_bytes(s3_image_bytes)
+                        s3_similaridade = calcular_similaridade_hash_bytes(s3_image_bytes)
 
-                    if s3_hash == local_hash:
-                        st.write(f"O upload tem o mesmo hash que {obj['Key']} que está no repositório")
-                        break
-                    else:                     
-                        if local_similaridade == s3_similaridade:
-                            st.write(f"O upload tem similaridade com a imagem {obj['Key']} que está no repositório")
+                        if s3_hash == local_hash:
+                            st.write(f"O upload tem o mesmo hash que {obj['Key']} que está no repositório")
                             break
+                        else:                     
+                            if local_similaridade == s3_similaridade:
+                                st.write(f"O upload tem similaridade com a imagem {obj['Key']} que está no repositório")
+                                break
 
            
 
