@@ -204,11 +204,11 @@ def previsao(interpreter, image):
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
 
-    st.write("Detalhes de Entrada (Input Details):")
-    st.json(input_details)
+    #st.write("Detalhes de Entrada (Input Details):")
+    #st.json(input_details)
 
-    st.write("Detalhes de Saída (Output Details):")
-    st.json(output_details)
+    #st.write("Detalhes de Saída (Output Details):")
+    #st.json(output_details)
     
     interpreter.set_tensor(input_details[0]['index'],image) 
     
@@ -222,8 +222,8 @@ def previsao(interpreter, image):
     df['classes'] = classes
     df['probabilidades (%)'] = 100*output_data[0]
 
-    st.write("Probabilidades por Classe:")
-    st.json(df.set_index('classes')['probabilidades (%)'].round(2).to_dict())
+    #st.write("Probabilidades por Classe:")
+    #st.json(df.set_index('classes')['probabilidades (%)'].round(2).to_dict())
     
     
     fig = px.bar(df,y='classes',x='probabilidades (%)',  orientation='h', text='probabilidades (%)', title='Probabilidade de Classes de Radiografia')
